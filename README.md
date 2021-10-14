@@ -11,3 +11,6 @@ Oct 16, 2021:  main_mech.py
 Oct 25, 2021:  hdata.py
 Oct 25, 2021:  requirements.txt
 Oct 30, 2021:  video #6
+
+
+https://github.com/CausalCog/CausalCog/blob/main/cca3_architecture.jpg
