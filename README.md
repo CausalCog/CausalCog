@@ -12,5 +12,5 @@ Oct 25, 2021:  hdata.py
 Oct 25, 2021:  requirements.txt
 Oct 30, 2021:  video #6
 
-
+cca3_architecture.jpg
 !(https://github.com/CausalCog/CausalCog/blob/main/cca3_architecture.jpg)
