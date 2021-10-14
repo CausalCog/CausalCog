@@ -1,0 +1,3 @@
+-please see start of cca4.py for “requirements.txt” of modules required
+-these modules and files will allow successful running of the code
+
