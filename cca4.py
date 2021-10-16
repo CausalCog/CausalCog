@@ -45,9 +45,14 @@ overview of cca4.py:
 
 #
 requirements.txt:
-    #environment
-    python 3.9 including standard library #tested in windows terminal, should work in other environments
-    #python original source code
+    #environment:
+    python 3.9 including standard library
+    -at this time, not all dependencies will run in other versions, e.g., python 3.10
+    -please use or create venv with these exact versions
+    -tested in windows terminal but code should optionally bypass windows-specifc os calls if run on other platforms
+    -please post platform issues as not tested yet on other platforms
+
+    #python original source code:
     cca4.py   #hyperparameters main_eval() for top level simulation runs
     main_mech.py #cycles() is effective main() of evaluation cycle
     ddata.py  #class MapData --> 'd'
@@ -55,7 +60,7 @@ requirements.txt:
     hdata.py  #class NavMod --> 'h'
     constants.py #constants only
 
-    #pypi packages
+    #pypi packages:
     pypi.org: fuzzywuzzy #use for cca4.py to avoid need for gpu's, nn
     pypi.org: numpy  #ver 1.19.3 to ensure compatilibity with python 3.9
     pypi.org: colorama, pyfiglet, termcolor #for ascii art printing
@@ -179,6 +184,8 @@ def welcome(g) -> bool:
     Schneider, H.: A Solution to the Binding Problem: Causal Cognitive Architecture 3 (CCA3), request hschneidermd@alum.mit.edu
     ''')
     g.fast_input("\nPress ENTER to continue...\n")
+
+    g.large_letts_display("OVERVIEW")
     print('''
     OVERVIEW OF THIS SIMULATION PROGRAM
     -----------------------------------
@@ -310,7 +317,9 @@ def choose_simulation(g: gdata.MultipleSessionsData, h: hdata.NavMod, m: hdata.M
         print(colored('Equations in the CCA3 Binding paper are for one "evaluation cycle"', 'cyan'))
         print(colored('i.e, processing cylcle, or just "cycle"', 'cyan'))
         print(colored('"Runs" refer to a new environment of input sensory scene. Equations are the same regardless of scene.', 'cyan'))
-        g.large_letts_display("enter  hyper-\nparameters")
+        g.fast_input("\nPress ENTER to continue....\n")
+        g.large_letts_display("enter  hyper-\nparameters:")
+        g.large_letts_display("brain   type")
         print(colored('Equations in the CCA3 Binding paper assume "Human-like brain"', 'cyan'))
 
 
@@ -505,6 +514,7 @@ def choose_starting_scene(d: ddata.MapData, g: gdata.MultipleSessionsData, h: hd
     '''
 
     # print out the first scene choices
+    g.large_letts_display("start  scene")
     print(
         '''
     CHOOSE ENVIRONMENT FIRST SCENE IS TO START IN\n
@@ -686,40 +696,29 @@ def computing_evnrt(h) -> bool:
     CCA4 ver
     displays information about the computing environment
     '''
+    print("NOTE: \nProgram optimized for terminal display with font of 20\n")
     print("\nInformation about computing environment:")
     print("CCA3 - CCA4 Transition Sept 2021 Version")
-    print("(Note: Program optimized for terminal display with font of 20)")
+    print("(Note: Should bypass any Windows-dependent calls if run on another platform.)")
     try:
         print("CCA4 Project: Python installed: ", os.path.dirname(sys.executable))
-        print(
-            "Platform Info (via StdLib): \n  ",
-            "Python version: ",
-            sys.version,
-            "\n   os.name:",
-            os.name,
-            ", sys.platform:",
-            sys.platform,
-            "platform.system:",
-            platform.system(),
-            ", platform.release:",
-            platform.release(),
-            "\n  ",
-            "platform.processor:",
-            platform.processor(),
-            "\n  ",
-            "sys.maxsize (9223372036854775807 for 64 bit Python): ",
-            sys.maxsize,
-        )
-        print(
-            "   total navigation maps (i.e., cortical mini-column analogues) available via constants.py: ",
-            h.total_maps,
-        )
-        try:
-            # GPU appropriate library required
-            print("   Local or cloud GPU checking not enabled at present")
-        except:
-            print("Unable to check correctly if GPU_ENABLED")
-        print("\n")
+        print("Platform Info (via StdLib): \n  ", "Python version: ", sys.version, "\n   os.name:",
+            os.name, platform.system(), platform.release(), "sys.platform:", sys.platform, "\n  ",
+            "(Windows note: sys.platform may give 'win32' result even if win64 for backwards compatibility reasons)\n",
+            "  platform.processor:", platform.processor(), "\n  ",
+            "sys.maxsize (9223372036854775807 for 64 bit Python): ", sys.maxsize)
+        print("   total navigation maps (i.e., cortical mini-column analogues) available via constants.py: ",
+            h.total_maps)
+        if BINDING:
+            print('For this CCA3 demonstration version no GPUs or cloud software required. No GPU checking.\n\n')
+        else:
+            try:
+                # GPU appropriate library required
+                #print("GPU Pytorch CUDA availability: ", torch.cuda.is_available())
+                print("Pytorch, CUDA, GPU checking not installed at present")
+            except:
+                print("Unable to check correctly if GPU_ENABLED")
+            print("\n\n")
         return True
     except:
         print("Unable to obtain full computing envrt information\n")
