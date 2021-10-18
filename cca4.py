@@ -744,18 +744,7 @@ def embedded_main_pyboard(g) -> None:
 #
 def main_eval() -> None:
     '''in_use_do_not_archive
-    CCA3 ver
-    although considered as __main__ this highest level loop in the code is
-     really more of an introduction to effective main routine in main_mech.py or elsewhere
-
-    prior to Feb 2021 calls a particular version of one the nano, micro, milli
-    or full simulation's evaluation cycles
-    after Feb 2021 cleanup allows entry of number of hyperparameters and then enters the effective
-     main routine in main_mech.py (which runs until the scene (==simulation) is completed)
-
-
     overview:
-
         if __name__ == '__main__': main_eval():
           -instantiations of data and method structures g, d, h
           - loop:
@@ -799,7 +788,7 @@ def main_eval() -> None:
 
         # start simulation run of evaluation cycles for the envr't
         d, g, h, m = main_mech.cycles(d, g, h, m)
-        input("checkpoint have just returned from main_mech.cycles")
+
         # return from a simulation run
         print_event_log_memory(g)
         if not run_again():
