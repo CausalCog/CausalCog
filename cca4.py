@@ -87,7 +87,8 @@ requirements.txt:
 # pylint: disable=too-many-branches
 # pylint: disable=too-many-statements
 #   prefer to use comfortable number of branches and statements, especially in user menu communication
-#
+# pylint: disable=too-many-arguments
+#   prefer use pass full set of objects g, d, h, m, c, a to/from some methods
 # other style notes:
 # ------------------
 #  -before each method it is ok to have comments giving a roadmap of where this method is being called from;
@@ -144,7 +145,7 @@ except ImportError:
     sys.exit()
 ##CCA3 module imports -- being used by this module
 try:
-    from constants import LIFESPAN, BINDING
+    from constants import LIFESPAN, BINDING, SAVE_RECALL_TO_FROM_STORAGE
     import gdata
     import ddata
     import hdata
@@ -180,8 +181,8 @@ def welcome(g) -> bool:
         Cognitive Systems Research 59:73-90 (2020)
     Schneider, H.: Causal Cognitive Architecture 1 (CCA1): Integration of Connectionist Elements into a
         Navigation-Based Framework. Cognitive Systems Research 66:67-81 (2021)
-    Schneider, H.: Causal Cognitive Architecture 2 (CCA2): A Solution to the Binding Problem, BICA*AI 2021 pending
-    Schneider, H.: A Solution to the Binding Problem: Causal Cognitive Architecture 3 (CCA3), request hschneidermd@alum.mit.edu
+    Schneider, H.: Causal Cognitive Architecture 2 (CCA2): A Solution to the Binding Problem, BICA*AI 2021, in press
+    Schneider, H.: A Solution to the Binding Problem: Causal Cognitive Architecture 3 (CCA3), Cognitive Systems Research, in press
     ''')
     g.fast_input("\nPress ENTER to continue...\n")
 
@@ -209,6 +210,7 @@ def welcome(g) -> bool:
 
     ''')
     g.fast_input("\nPress ENTER to continue...\n")
+    g.large_letts_display("OVERVIEW  2")
     print('''
     3. Then you will be asked to specify the first scene (i.e., really the first environment)
     your newly manufactured robot sees and senses. (Note there can be many sensory scenes one after the other,
@@ -233,10 +235,11 @@ def welcome(g) -> bool:
 
 
     ''')
+    g.fast_input("\nPress ENTER to continue...\n")
 
     # show images related to architecture
     # temporary code and positioning for now; consider captions and driving code from store of images and text
-    ret_value = True
+    g.large_letts_display("DIAGRAMS")
     ret_value = g.show_architecture_related("cca3_architecture.jpg", "CCA3 architecture")
     ret_value = g.show_architecture_related("binding_spatial_features.jpg", "spatial binding in CCA3")
     ret_value = g.show_architecture_related("binding_temporal.jpg", "temporal binding in CCA3")
@@ -285,33 +288,7 @@ def choose_simulation(g: gdata.MultipleSessionsData, h: hdata.NavMod, m: hdata.M
 
         # print out welcome message
         welcome(g)
-        print('\nNote about "runs", "cycles" and "scenes":')
-        print('-----------------------------------------')
-        print('\nBelow, each simulation run (whether in a PATIENT hospital room environment, in a')
-        print('SUDOKO environment, and so on) is displayed as "run #1", "run #2", and so on.')
-        print('\nWithin a simulation "run" there are "evaluation cycles" counted starting from cycle 0,')
-        print('cycle 1, and so on. When a new simulation run starts again, the evaluation "cycles" (and the')
-        print('input sensory "scenes") start counting from zero again, i.e., "cycle 0", "scene 0".')
-        print('\nWithin a simulation "run" there are also "scenes" counted starting from scene 0, scene 1,')
-        print('and so on. The scenes represent input data from the external world that the CCA3 is')
-        print('sensing. They represent "sensory scenes" (i.e., visual, auditory, olfactory, radar, etc')
-        print('sensory information) rather than just a visual scene. If the CCA3 is built and running a')
-        print('real robot then these scenes are real hardware input signals. However, below in these simulations')
-        print('the sensory scenes generally are simulated. Please note that the scene numbers do not have to')
-        print('correspond with the evaluation cycle numbers, since several evaluation cycles may be used')
-        print('to process a sensory scene.\n')
-        print('For example:')
-        print('RUN#1 eg, SUDOKO environment')
-        print('     evaluation cycle or CYCLE#0  processsing sensory scene SCENE #0 <--scene related to the SUDOKO environment')
-        print('     CYCLE#1 processing SCENE#0 <--scene related to the SUDOKO environment')
-        print('     CYCLE#2 processing SCENE#1 <--scene related to the SUDOKO environment')
-        print('     ....')
-        print('     ....')
-        print('RUN#2 eg, HOSPITAL environment')
-        print('     CYCLE#0  processsing sensory SCENE #0 <--scene related to the HOSPITAL environment')
-        print('     CYCLE#1 processing SCENE#0  <--scene related to the HOSPITAL environment')
-        print('     ....')
-        print('     ....\n\n')
+        runs_cycles_message(g)
         g.fast_input("\nPress ENTER to start the simulation....")
         g.large_letts_display("run  #  " + str(g.mission_counter), g.mission_counter)
         print(colored('Equations in the CCA3 Binding paper are for one "evaluation cycle"', 'cyan'))
@@ -372,6 +349,8 @@ def choose_simulation(g: gdata.MultipleSessionsData, h: hdata.NavMod, m: hdata.M
     # ddata is re-instantiated within main_eval loop, while gdata persists between scenes
     h = hdata.NavMod()
     m = hdata.MapFeatures()
+    #c = hdata.CognitiveMapFeatures()
+    #a = hdata.AugmentedMapFeatures()
 
     if b_b == 1:
         # h.current_hippocampus = 'LAMPREY'
@@ -494,6 +473,39 @@ def choose_simulation(g: gdata.MultipleSessionsData, h: hdata.NavMod, m: hdata.M
     g.fast_input("\nPress ENTER to continue...\n")
     # returns h,m since h,m modified by this method
     return h, m
+
+
+def runs_cycles_message(g):
+    '''in_use_do_not_archive
+    prints out what is meant by 'runs', 'cycles', 'scenes'
+    '''
+    g.large_letts_display("runs & cycles")
+    print('\nBelow, each simulation run (whether in a PATIENT hospital room environment, in a')
+    print('SUDOKO environment, and so on) is displayed as "run #1", "run #2", and so on.')
+    print('\nWithin a simulation "run" there are "evaluation cycles" counted starting from cycle 0,')
+    print('cycle 1, and so on. When a new simulation run starts again, the evaluation "cycles" (and the')
+    print('input sensory "scenes") start counting from zero again, i.e., "cycle 0", "scene 0".')
+    print('\nWithin a simulation "run" there are also "scenes" counted starting from scene 0, scene 1,')
+    print('and so on. The scenes represent input data from the external world that the CCA3 is')
+    print('sensing. They represent "sensory scenes" (i.e., visual, auditory, olfactory, radar, etc')
+    print('sensory information) rather than just a visual scene. If the CCA3 is built and running a')
+    print('real robot then these scenes are real hardware input signals. However, below in these simulations')
+    print('the sensory scenes generally are simulated. Please note that the scene numbers do not have to')
+    print('correspond with the evaluation cycle numbers, since several evaluation cycles may be used')
+    print('to process a sensory scene.\n')
+    print('For example:')
+    print('RUN#1 eg, SUDOKO environment')
+    print('     evaluation cycle or CYCLE#0  processsing sensory scene SCENE #0 <--scene related to the SUDOKO environment')
+    print('     CYCLE#1 processing SCENE#0 <--scene related to the SUDOKO environment')
+    print('     CYCLE#2 processing SCENE#1 <--scene related to the SUDOKO environment')
+    print('     ....')
+    print('     ....')
+    print('RUN#2 eg, HOSPITAL environment')
+    print('     CYCLE#0  processsing sensory SCENE #0 <--scene related to the HOSPITAL environment')
+    print('     CYCLE#1 processing SCENE#0  <--scene related to the HOSPITAL environment')
+    print('     ....')
+    print('     ....\n\n')
+    return True
 
 
 def choose_starting_scene(d: ddata.MapData, g: gdata.MultipleSessionsData, h: hdata.NavMod)-> ddata.MapData:
@@ -647,6 +659,28 @@ def print_event_log_memory(g: gdata.MultipleSessionsData) -> bool:
     return False
 
 
+def recall_from_storage(g, d, h, m, c, a):
+    '''in_use_do_not_archive
+    CCA4 ver
+    recalls values of g, d, h, m, c, a from long term storage media
+    '''
+    print("recalls values of g, d, h, m, c, a from long term storage media")
+    print("long-term storage media: ")
+    print("long term storage not available at present\n")
+    return g, d, h, m, c, a
+
+
+def save_to_storage(g, d, h, m, c, a):
+    '''in_use_do_not_archive
+    CCA4 ver
+    saves values of g, d, h, m, c, a to long term storage media
+    '''
+    print("saves values of g, d, h, m, c, a to long term storage media")
+    print("long-term storage media: ")
+    print("long term storage not available at present\n")
+    return g, d, h, m, c, a
+
+
 def run_again() -> bool:
     '''in_use_do_not_archive
     CCA3 ver
@@ -696,8 +730,11 @@ def computing_evnrt(h) -> bool:
     CCA4 ver
     displays information about the computing environment
     '''
-    print("NOTE: \nProgram optimized for terminal display with font of 20\n")
-    print("\nInformation about computing environment:")
+    print("** PLEASE MAKE SURE YOUR TERMINAL DISPLAY IS FULL SIZE WITH APPROPRIATE FONT, SIZE 20 **")
+    print("(Windows terminal - right click on the menu bar, left click on 'Properties', click 'Font', 'Size' == 20, 'Font' == Consolas)")
+    print("(Consolas font is 9px wide, 20 px high; click 'Colors', 'Screen Text' == dark green, 'Screen Background' == black)")
+    print("(Mac, Linux platforms - please similarly adjust your terminal properties, as needed)")
+    print("\n\nInformation about computing environment:")
     print("CCA3 - CCA4 Transition Sept 2021 Version")
     print("(Note: Should bypass any Windows-dependent calls if run on another platform.)")
     try:
@@ -762,22 +799,17 @@ def main_eval() -> None:
 
     '''
     # set up
-    g = gdata.MultipleSessionsData()  # g persists between scenes
-    d = ddata.MapData()  # d re-initialized -- between scenes always
-    h = hdata.NavMod()  # h re-initialized  -- between scenes optionally via choose_simulation
-    m = hdata.MapFeatures() # m re-initialized -- between scenes optionally via choose_simulation
+    g = gdata.MultipleSessionsData()    #persists between runs
+    d = ddata.MapData()                 #re-initialized every run
+    h = hdata.NavMod()                  #optional re-initialized each run if no choose '0 Same as Last Brain'
+    m = hdata.MapFeatures()             #optional re-initialized each run if no choose '0 Same as Last Brain'
+    c = hdata.CognitiveMapFeatures()    #optional re-initialized each run if no choose '0 Same as Last Brain'
+    a = hdata.AugmentedMapFeatures()    #optional re-initialized each run if no choose '0 Same as Last Brain'
+    if SAVE_RECALL_TO_FROM_STORAGE:
+        g, d, h, m, c, a = recall_from_storage(g, d, h, m, c, a)
     #input('\ndebug:chance to see startup messages prior to cls... press ENTER to continue....')
-    #ic.disable()  #can turn off icecream debug printing lines
     g.one_moment_please_display(1)
     g.choose_if_g_fastrun_on_off() #set verbosity for devp't
-
-
-    ##SANDBOX
-    #print('start sandbox with access to d,g,h,m structures at start of cca3 code....')
-
-    #input('\nsandbox code has finished....press a key to end program....')
-    #exit_program(g)
-    ##END SANDBOX
 
     # siml'n run for a given envr't, then repeat for a new envr't or exit
     for g.mission_counter in range(1, LIFESPAN):  #10,000
@@ -785,16 +817,18 @@ def main_eval() -> None:
         h, m = choose_simulation(g, h, m)
         d = choose_starting_scene(d, g, h)
         start_run_messages(d, g, h)
-
         # start simulation run of evaluation cycles for the envr't
         d, g, h, m = main_mech.cycles(d, g, h, m)
-
         # return from a simulation run
         print_event_log_memory(g)
         if not run_again():
             break
         d = ddata.MapData()  # re-initialize for next simulation run
         # if not exited, then select new (or same) envr't and repeats now again ----^
+
+    # end program
+    if SAVE_RECALL_TO_FROM_STORAGE:
+        g, d, h, m, c, a = save_to_storage(g, d, h, m, c, a)
     exit_program(g)
 #
 ##END INTRO-MAIN      END INTRO-MAIN

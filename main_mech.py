@@ -179,10 +179,13 @@ def display_cycle_info(d, g, h):
     return True
 
 
-def decide_to_exit(next_scene_from_envrt, d, g, h):
+def decide_to_exit(next_scene_from_envrt, d, g, h, one_loop = True):
     '''in_use_do_not_archive
     makes decision to exit from main_mech.cycles() main loop
     '''
+    #one_loop mode is intended to allow one loop through cycle() and then return back to main_eval()
+    if one_loop:
+        return True
     #exit if no more scenes to be served, i.e., 'mission' in this group of sensory scenes is complete
     if next_scene_from_envrt < 0:
         h.exit_reason = " no more scenes to be served"

@@ -301,7 +301,10 @@ class MultipleSessionsData:
         '''
         #pylint: disable=anomalous-backslash-in-string
         os.system("cls")
-        self.large_letts_display("CCA3  DEMONSTRATION")
+        if BINDING:
+            self.large_letts_display("CCA3  DEMONSTRATION")
+        else:
+            self.large_letts_display("CCA3")
         print("""                                  ,
                               ,   |
            _,,._              |  0'
@@ -317,7 +320,7 @@ class MultipleSessionsData:
 
         One moment while we tune up the code for you....
         """)
-        self.startup_overhead(delay)
+        self.startup_overhead(2*delay)
         self.large_letts_display("Ready")
         input('        Ready.... please press ENTER to continue....')
         os.system("cls")
@@ -360,9 +363,9 @@ class MultipleSessionsData:
         self.large_letts_display("Press   ENTER\n( or   rocket   code )\n")
         print('To run simulation in normal way -- press ENTER\n')
         print('To run simulation in quicker developer mode (removes many prompts) -- "d" + ENTER\n')
-        print('Other developer codes pending\n')
+        print('Other developer "rocket codes" pending\n')
         try:
-            dev_code = input("Press ENTER to continue, or enter devp't code: ")
+            dev_code = input("Press ENTER to continue (or developer code): ")
             if dev_code in ['', 'off', 'OFF', 'normal']:
                 return_value = self.toggle_g_fastrun_off()
             else:

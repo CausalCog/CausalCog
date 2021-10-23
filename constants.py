@@ -99,6 +99,7 @@ FASTRUN = True #True causes skipping of many user inputs
 AUTORUN = False #True will run whole session without user input
 LIFESPAN = 10000  #max loops for main_eval()
 MOD_CYCLE_REEVALUATE = 5
+SAVE_RECALL_TO_FROM_STORAGE = False
 TOTAL_ROWS = 6  #count EDGE squares
 TOTAL_COLS = 6  #count EDGE squares
 GOAL_RANDOM_WALK = '00000000'
