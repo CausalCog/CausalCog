@@ -171,7 +171,7 @@ def display_cycle_info(d, g, h):
     if h.current_sensory_scene < 0:
         print("resetting a negative completed environment back to 0th scene")
         h.current_sensory_scene = 0
-    print(f"\nSTARTING EVALUATION CYCLE # {d.evaluation_cycles} (run # {g.mission_counter} since simulation started)")
+    print(f"\nSTARTING EVALUATION CYCLE # {d.evaluation_cycles} (run # {g.mission_counter} since simulation started)(runs start at '1')")
     g.large_letts_display("Cycle #  " + str(d.evaluation_cycles))
     g.large_letts_display("Scene #  " + str(h.current_sensory_scene))
     g.show_architecture_related("cca3_architecture.jpg", "CCA3 architecture")
@@ -183,6 +183,11 @@ def decide_to_exit(next_scene_from_envrt, d, g, h, one_loop = True):
     '''in_use_do_not_archive
     makes decision to exit from main_mech.cycles() main loop
     '''
+    print(colored("\n\n\nCCA3 Binding paper software walk-through note:", 'blue'))
+    if one_loop:
+        print(colored("Software currently set for exit after one loop, like in paper. (Please set one_loop==False to avoid this.)", 'blue'))
+    print(colored("cycles() loop: if (.....): update expected values, return d,g,h,m and exit back to cca4.main_eval())\n\n", 'blue'))
+    g.fast_input("Press ENTER to continue...\n")
     #one_loop mode is intended to allow one loop through cycle() and then return back to main_eval()
     if one_loop:
         return True
@@ -232,6 +237,9 @@ def autonomic_check(g) -> bool:
     the first stages of external sensory input vectors in the
     evaluation cycle
     '''
+    print(colored("\n\n\nCCA3 Binding paper software walk-through note:", 'blue'))
+    print(colored("cycles() loop: autonomic_check()\n\n", 'blue'))
+    g.fast_input("Press ENTER to continue...\n")
     g.large_letts_display("AUTONOMIC MODULE SIMULATION")
     g.fast_input("\nPress ENTER to continue...\n")
     autonomic_sleep_wake(g)
@@ -2997,8 +3005,10 @@ def update_expected_values(d, g, h):
     g.raw_future_expected_values_from_multiple_missions simply appends results of each mission
     '''
     #future value update
+    g.large_letts_display("END OF RUN")
+    g.large_letts_display("HOUSEKEEPING")
     print('\nUpdate Expected Values\n')
-    d.raw_future_expected_value_for_this_mission = d.evaluation_cycles
+    d.raw_future_expected_value_for_this_mission = d.evaluation_cycles + 1 #cycles start at 0
     g.raw_future_expected_values_from_multiple_missions.append([d.current_goal, h.exit_reason, d.raw_future_expected_value_for_this_mission])
     print("raw_future_expected_value_for_this_mission since mission started, ie, moves or cycles:  {}\n\n".format(d.raw_future_expected_value_for_this_mission))
     print("raw_future_expected_values_from_multiple_missions: ", g.raw_future_expected_values_from_multiple_missions)
@@ -3007,7 +3017,7 @@ def update_expected_values(d, g, h):
 
     #mission complete message
     print("\nScene/mission ended for reason: ", h.exit_reason)
-    print("after this number of evaluation cycles:", d.evaluation_cycles)
+    print("after this number of evaluation cycles:", d.evaluation_cycles + 1) #cycles start at 0
     g.large_letts_display("Run Complete")
     return d, g, h
 

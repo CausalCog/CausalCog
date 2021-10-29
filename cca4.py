@@ -194,8 +194,8 @@ def welcome(g) -> bool:
     1. In this simulation first you will be asked to specify some of the hyperparameters in terms of loosely analogous
     animal equivalents. For example, you can specify a "reptile hippocampal/pallium analogue."
 
-    [Note: Augmented human brain features may be available but are simply for developmental purposes, with no
-    claims of superintelligence, AGI, and so on being made.]
+    [Note: Augmented human brain features may or may not be available (depending on version) but are simply for
+    development purposes, with no claims of superintelligence or AGI being made.]
 
     2. The specified brain is then automatically embedded into a robot body. The robot + the CCA3 architecture are
     called "CCA3 robot" or just "CCA3" -- thus, when you see "robot" or "CCA3" think of a robot body being
@@ -206,7 +206,7 @@ def welcome(g) -> bool:
     [At this time, you do not have any options with regard to the virtual embodiment specifications. Assume a
     generic-like humanoid body with the ability for sensation, locomotion and ability to manipulate objects.]
     [A low-level pyboard version exists in the palimpsest code for interface to a real world embodiment, but
-    present the CCA3 code and libraries need mods for functional compatibility with MicroPython.]
+    currently the CCA3 code and libraries need mods for functional compatibility with MicroPython.]
 
     ''')
     g.fast_input("\nPress ENTER to continue...\n")
@@ -730,7 +730,7 @@ def computing_evnrt(h) -> bool:
     CCA4 ver
     displays information about the computing environment
     '''
-    print("** PLEASE MAKE SURE YOUR TERMINAL DISPLAY IS FULL SIZE WITH APPROPRIATE FONT, SIZE 20 **")
+    print(colored("** PLEASE MAKE SURE YOUR TERMINAL DISPLAY IS FULL SIZE WITH APPROPRIATE FONT, SIZE 20 **", 'red'))
     print("(Windows terminal - right click on the menu bar, left click on 'Properties', click 'Font', 'Size' == 20, 'Font' == Consolas)")
     print("(Consolas font is 9px wide, 20 px high; click 'Colors', 'Screen Text' == dark green, 'Screen Background' == black)")
     print("(Mac, Linux platforms - please similarly adjust your terminal properties, as needed)")
@@ -807,19 +807,30 @@ def main_eval() -> None:
     a = hdata.AugmentedMapFeatures()    #optional re-initialized each run if no choose '0 Same as Last Brain'
     if SAVE_RECALL_TO_FROM_STORAGE:
         g, d, h, m, c, a = recall_from_storage(g, d, h, m, c, a)
-    #input('\ndebug:chance to see startup messages prior to cls... press ENTER to continue....')
+    #input('\ndebug:view startup messages prior to cls... press ENTER to continue....')
     g.one_moment_please_display(1)
     g.choose_if_g_fastrun_on_off() #set verbosity for devp't
 
     # siml'n run for a given envr't, then repeat for a new envr't or exit
     for g.mission_counter in range(1, LIFESPAN):  #10,000
         # set up data and hyperparameters for the scene
+        print(colored("\n\n\nCCA3 Binding paper software walk-through note:", 'blue'))
+        print(colored("main_eval() loop: obtain hyperparameters\n\n", 'blue'))
+        g.fast_input("Press ENTER to continue...\n")
         h, m = choose_simulation(g, h, m)
         d = choose_starting_scene(d, g, h)
         start_run_messages(d, g, h)
+
         # start simulation run of evaluation cycles for the envr't
+        print(colored("\n\n\nCCA3 Binding paper software walk-through note:", 'blue'))
+        print(colored("main_eval() loop: call main_mech.cycles()\n\n", 'blue'))
+        g.fast_input("Press ENTER to continue...\n")
         d, g, h, m = main_mech.cycles(d, g, h, m)
+
         # return from a simulation run
+        print(colored("\n\n\nCCA3 Binding paper software walk-through note:", 'blue'))
+        print(colored("main_eval() loop: returned from simulation run\n\n", 'blue'))
+        g.fast_input("Press ENTER to continue...\n")
         print_event_log_memory(g)
         if not run_again():
             break

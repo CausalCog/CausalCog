@@ -110,6 +110,7 @@ class MultipleSessionsData:
         self.debug = DEBUG
         self.fastrun = FASTRUN #True causes skipping of many user inputs
         self.autorun = AUTORUN #True will run whole session without user input
+        self.fast_display = False #True will cause not display jpeg's in external graphics program
         self.mod_cycle_reevaluate = MOD_CYCLE_REEVALUATE
         self.version = VERSION
         self.hardware = HARDWARE
@@ -197,7 +198,7 @@ class MultipleSessionsData:
         '''in_use_do_not_archive
         shows diagram of Causal Cognitive Architecture components to better let
         user follow what stages the software is going through'''
-        if self.fastrun:
+        if self.fast_display:
             return True
         print(f"\nWould you like to see a diagram of the {part} to better follow what modules the code is working through??")
         print("\n(Note: Any images displayed below will be outside of terminal. If you decide to view any images, after you exit")
@@ -343,6 +344,7 @@ class MultipleSessionsData:
             print(colored("NOTE:  ALL EQUATION NUMBERS LINKED AND DEMONSTRATED", "cyan"))
             print(colored("NOTE:  NO GPU REQUIRED FOR THIS VERSION -- FUZZYWUZZY USED FOR PATTERN RECOGNITION", 'cyan'))
             print(colored("(navigation maps will be updated, but some of the recognition learning will not occur)", 'cyan'))
+            print(colored("** PLEASE MAKE SURE YOUR TERMINAL DISPLAY IS FULL SIZE WITH APPROPRIATE FONT(Windows: Consolas size 20) **", 'red'))
             return True
         if option == 1:
             # GPU appropriate library required
@@ -363,37 +365,53 @@ class MultipleSessionsData:
         self.large_letts_display("Press   ENTER\n( or   rocket   code )\n")
         print('To run simulation in normal way -- press ENTER\n')
         print('To run simulation in quicker developer mode (removes many prompts) -- "d" + ENTER\n')
-        print('Other developer "rocket codes" pending\n')
+        print('("e" == "d" + escapes from external graphic display; other developer "rocket codes" pending)\n\n')
         try:
             dev_code = input("Press ENTER to continue (or developer code): ")
             if dev_code in ['', 'off', 'OFF', 'normal']:
                 return_value = self.toggle_g_fastrun_off()
+            elif dev_code in ['d', 'D']:
+                print(f'Development code {dev_code} entered -- will bypass many menu prompts\n')
+                input('Please press ENTER to continue....') #cls will occur thus prompt to let user see mode
+                return_value = self.toggle_g_fastrun_on(False)
+            elif dev_code in ['e', 'E']:
+                print(f'Development code {dev_code} entered includes bypass of external graphical display\n')
+                input('Please press ENTER to continue....')
+                return_value = self.toggle_g_fastrun_on(True)
+            elif dev_code in ['-1', 'special']:
+                print(f'Development code {dev_code} entered -- future usage\n')
+                input('Developer mode is not turned on.... press ENTER to continue....')
+                return_value = self.toggle_g_fastrun_off()
             else:
                 print(f'Development code {dev_code} entered')
-                return_value = self.toggle_g_fastrun_on()
-                if dev_code in ['-1', 'special']:
-                    input('Development mode as note above selected.... press ENTER to continue....')
+                print('This is not a valid development code -- developer mode is not turned on\n')
+                input('Please press ENTER to continue....')
+                return_value = self.toggle_g_fastrun_off()
         except:
             print('debug: invalid input -- g.fastrun will be False')
+            input('Developer mode is not turned on.... press ENTER to continue....')
             return_value = self.toggle_g_fastrun_off()
+
         return return_value
 
 
-    def toggle_g_fastrun_off(self):
+    def toggle_g_fastrun_off(self, fast_display=False):
         '''in_use_do_not_archive
         turn g.fastrun to False
         '''
         self.fastrun = False
-        #print('g.fastrun is: ', self.fastrun) #keep screen clean and avoid print if off
+        self.fast_display = fast_display
+        #print('g.fastrun is: ', self.fastrun, 'g.fast.display is: ', self.fast_display)
         return False
 
 
-    def toggle_g_fastrun_on(self):
+    def toggle_g_fastrun_on(self, fast_display=False):
         '''in_use_do_not_archive
         turn g.fastrun to False
         '''
         self.fastrun = True
-        print('g.fastrun is: ', self.fastrun)
+        self.fast_display = fast_display
+        print('g.fastrun is: ', self.fastrun, 'g.fast.display is: ', self.fast_display)
         return True
 
 
