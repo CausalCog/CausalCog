@@ -9,7 +9,7 @@ Click [here](https://github.com/CausalCog/CausalCog/blob/main/video%202%20csr%20
 
 Click [here](https://github.com/CausalCog/CausalCog/blob/main/video%203%20csr%20supp%20ver2.pdf ) for video #3
 
-Click [here]( ) for video #4
+Click [here](https://github.com/CausalCog/CausalCog/blob/main/video%204%20csr%20supp%20ver2.pdf ) for video #4
 
 Click [here]( ) for video #5
 
